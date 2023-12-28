@@ -3,7 +3,7 @@
     <el-container>
       <el-header class="header-wrapped">
         <div class="header-content">
-          <h2>新能源汽车产业监测</h2>
+          <h1>新能源汽车产业监测</h1>
           <span class="welcome">欢迎您的登录</span>
         </div>
       </el-header>
@@ -21,7 +21,7 @@
                   </el-form-item>
                   <div class="footer-wrapped">
                     <div class="forget-password">
-                      <span class="forget-password-button">忘记密码</span>
+                      <span class="forget-password-button" @click="openForget">忘记密码</span>
                     </div>
                     <div class="footer-button">
                       <el-button type="primary">登录</el-button>
@@ -32,7 +32,34 @@
                   </div>
                 </el-form>
               </el-tab-pane>
-              <el-tab-pane label="注册" name="second">注册</el-tab-pane>
+              <el-tab-pane label="注册" name="second">
+                <el-form class="login-form">
+                  <el-form-item label="账号">
+                    <el-input v-model="registerData.account" placeholder="英文数字组合，6到20位"/>
+                  </el-form-item>
+                  <el-form-item label="密码">
+                    <el-input v-model="registerData.password" placeholder="至少8位，大写字母、小写字母和数字"/>
+                  </el-form-item>
+                  <el-form-item label="确认密码">
+                    <el-input v-model="registerData.repassword" placeholder="请再次输入密码"/>
+                  </el-form-item>
+                  <el-form-item label="手机">
+                    <el-input v-model="registerData.phone"/>
+                  </el-form-item>
+                  <el-form-item label="邮箱">
+                    <el-input v-model="registerData.email"/>
+                  </el-form-item>
+                  <el-form-item label="职位">
+                    <el-input v-model="registerData.job"/>
+                  </el-form-item>
+                  <el-form-item label="公司">
+                    <el-input v-model="registerData.company"/>
+                  </el-form-item>
+                  <div class="footer-button">
+                    <el-button type="primary">注册</el-button>
+                  </div>
+                </el-form>
+              </el-tab-pane>
             </el-tabs>
           </el-card>
         </div>
@@ -49,28 +76,51 @@
       </el-footer>
     </el-container>
   </div>
+  <forget ref="forgetP"></forget>
 </template>
 
 
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
-  const activeName = ref('first')
+import { ref, reactive } from 'vue'
+import forget from './components/forgetpassword.vue'
+const activeName = ref('first')
 
-  interface formData {
-    account: string;
-    password: string;
-  }
-  const loginData:formData = reactive({
-    account: '',
-    password: ''
-  })
+interface formData {
+  account: string;
+  password: string;
+  repassword ?: string;
+  phone ?: string;
+  email ?: string;
+  job ?: string;
+  company ?: string;
+}
+const loginData:formData = reactive({
+  account: '',
+  password: ''
+})
+const registerData:formData = reactive({
+  account: '',
+  password: '',
+  repassword: '',
+  phone: '',
+  email: '',
+  job: '',
+  company: ''
+})
+// open forget password dialog
+const forgetP = ref()
+const openForget = () => {
+  forgetP.value.open()
+}
 </script>
 
 <style lang="scss" scoped>
   .header-wrapped {
+    height: 100px;
     .header-content {
+      font-size: 20px;
       width: 1200px;
-      margin: 0 auto;
+      margin: 5px auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -81,19 +131,18 @@
   }
   .el-main {
     background-image: url('@/assets/login_nev.jpg');
-    height: 600px;
+    height: 800px;
     background-size: 100%;
     --el-main-padding: 0;
     .login-wrapped {
       width: 1200px;
-      height: 600px;
+      height: 800px;
       margin: 0 auto;
       .box-card {
         width: 350px;
-        height: 375px;
         float: right;
         position: relative;
-        top: 14%;
+        top: 20%;
         .login-form {
           .footer-wrapped {
             display: flex;
@@ -108,11 +157,6 @@
                 cursor: pointer;
               }
             }
-            .footer-button {
-              width: 100%;
-              display: flex;
-              justify-content: center;
-            }
             .footer-go-register {
               font-size: 12px;
               margin: 12px 0;
@@ -124,6 +168,11 @@
                 cursor: pointer;
               }
             }
+          }
+          .footer-button {
+            width: 100%;
+            display: flex;
+            justify-content: center;
           }
         }
       }
