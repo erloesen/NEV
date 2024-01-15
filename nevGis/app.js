@@ -9,6 +9,14 @@ const Joi = require('joi');
 
 // global cors
 app.use(cors())
+
+// multer use to handle multipart/form-data, to upload files
+const multer = require("multer");
+// save upload files
+const upload = multer({dest: './public/upload'})
+app.use(upload.any())
+app.use(express.static("./public"))
+
 // parse application extended=false value=str/array
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -29,15 +37,18 @@ app.use((req, res, next) => {
 // import jwt, exclude interface doesnt need to be coded (login and register)
 const jwtconfig = require('./jwt_config/index.js');
 const { expressjwt:jwt } = require('express-jwt')
-app.use(jwt({
-    secret: jwtconfig.jwtSecretKey, algorithms:['HS256']
-}).unless({
-    path: [/^\/api\//]
-}))
+// app.use(jwt({
+//     secret: jwtconfig.jwtSecretKey, algorithms:['HS256']
+// }).unless({
+//     path: [/^\/api\//]
+// }))
 
 // router
 const loginRouter = require('./router/login');
 app.use('/api', loginRouter)
+const userRouter = require('./router/userinfo');
+app.use('/user', userRouter)
+
 
 // send err if joi
 app.use((req, res, next) => {

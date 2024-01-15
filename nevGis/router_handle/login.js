@@ -22,13 +22,13 @@ exports.register = (req, res) => {
             // encryption
             reginfo.password = bcrypt.hashSync(reginfo.password, 10)
             // insert
-            const sqlin = 'insert into sys_users (account, password, phone, email, name, job, company, role,' +
-                                 ' status, createdate) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ';
+            const sqlin = "insert into sys_users (account, password, phone, email, job, company, role," +
+                                 " status, createdate) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) ";
             const role = 'user';
             const status = 'normal';
             const createdate = new Date();
-            const value = [reginfo.account, reginfo.password, reginfo.phone, reginfo.email, reginfo.name,
-                                  reginfo.job, reginfo.company, role, status, createdate];
+            const value = [reginfo.account, reginfo.password, reginfo.phone, reginfo.email,
+                reginfo.job, reginfo.company, role, status, createdate];
             db.query(sqlin, value, (err, result) => {
                 if (result.rowCount !== 1) { return res.cc('register filed!') }
                 return res.cc('register successfully', 0)

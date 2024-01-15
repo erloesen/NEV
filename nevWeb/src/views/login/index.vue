@@ -1,9 +1,9 @@
-<template>
+<template class="total">
   <div class="common-layout">
     <el-container>
       <el-header class="header-wrapped">
         <div class="header-content">
-          <h1>新能源汽车产业监测</h1>
+          <h1>新能源汽车产业活跃度监测</h1>
           <span class="welcome">欢迎您的登录</span>
         </div>
       </el-header>
@@ -24,7 +24,7 @@
                       <span class="forget-password-button" @click="openForget">忘记密码</span>
                     </div>
                     <div class="footer-button">
-                      <el-button type="primary">登录</el-button>
+                      <el-button type="primary" @click="Login">登录</el-button>
                     </div>
                     <div class="footer-go-register">
                       还没有账号？<span class="go-register">马上注册</span>
@@ -56,7 +56,7 @@
                     <el-input v-model="registerData.company"/>
                   </el-form-item>
                   <div class="footer-button">
-                    <el-button type="primary">注册</el-button>
+                    <el-button type="primary" @click="Register">注册</el-button>
                   </div>
                 </el-form>
               </el-tab-pane>
@@ -83,8 +83,12 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
 import forget from './components/forgetpassword.vue'
-const activeName = ref('first')
+import { ElMessage } from "element-plus";
+import { login, register} from '@/api/login'
+import { useRouter } from "vue-router";
 
+const activeName = ref('first')
+const router = useRouter()
 interface formData {
   account: string;
   password: string;
@@ -107,6 +111,44 @@ const registerData:formData = reactive({
   job: '',
   company: ''
 })
+// register
+const Register = async () => {
+  if (registerData.password == registerData.repassword) {
+    const res = await register(registerData)
+    if (res.data.message == 'register successfully') {
+      ElMessage({
+        message: '注册成功',
+        type: 'success'
+      })
+      activeName.value = 'first'
+    } else {
+      ElMessage.error('注册失败')
+    }
+  } else {
+    ElMessage.error('两次密码不一致')
+  }
+}
+
+// login
+const Login = async () => {
+  const res = await login(loginData)
+  const {token} = res.data
+  const {name} = res.data.results.account
+  console.log(res)
+  if (res.data.message == 'login successfully') {
+    ElMessage({
+      message: '登录成功',
+      type: 'success'
+    })
+    localStorage.setItem('token', token)
+    localStorage.setItem('username', name)
+    router.push('/home')
+  } else {
+    ElMessage.error('登陆失败')
+  }
+}
+
+
 // open forget password dialog
 const forgetP = ref()
 const openForget = () => {
@@ -217,4 +259,9 @@ const openForget = () => {
     height: 45px;
     font-size: 16px;
   }
+
+  //.common-layout {
+  //  height: 100vh;
+  //  background-color: #0b308e;
+  //}
 </style>
