@@ -52,6 +52,23 @@ exports.getUserinfo = (req, res) => {
     })
 }
 
+// modify password read old one then set new one
+exports.changePassword = (req, res) => {
+    const sql = 'select password from sys_users where id = $1'
+    db.query(sql, [req.body.id], (err, result) => {
+        if (err) {return res.cc(err)}
+        const compareResult = bcrypt.compareSync(req.body.oldpassword, result.rows[0].password)
+        if (!compareResult) {return res.cc('password incorrect!')}
+        req.body.newpassword = bcrypt.hashSync(req.body.newpassword, 10)
+        const sql1 = 'update sys_users set password = $1 where id = $2'
+        db.query(sql1, [req.body.newpassword, req.body.id], (err, result) => {
+            if (err) {return res.cc(err)}
+            res.cc('modified', 0)
+        })
+    })
+}
+
+
 // modify name use id
 exports.changeName = (req, res) => {
     const {id, name} = req.body;
@@ -79,5 +96,33 @@ exports.changeEmail = (req, res) => {
     db.query(sql, [email, id], (err, result) => {
         if (err) { return res.cc(err) }
         res.cc('modified', 0)
+    })
+}
+
+// forgetPassword verify account and email
+exports.verifyAccountAndEmail = (req, res) => {
+    const {account, email} = req.body;
+    const sql = 'select * from sys_users where account = $1'
+    db.query(sql, [account], (err, result) => {
+        if (err) { return res.cc(err) }
+        if (email == result.rows[0].email) {
+            return res.send({
+                status: 0,
+                message: 'verify successfully',
+                id: result.rows[0].id
+            })
+        } else {
+            return res.cc('verify failed!')
+        }
+    })
+}
+
+// forgetPassword reset it use id and newpassword
+exports.resetPassword = (req, res) => {
+    req.body.newpassword = bcrypt.hashSync(req.body.newpassword, 10)
+    const sql = 'update sys_users set password = $1 where id = $2'
+    db.query(sql, [req.body.newpassword, req.body.id], (err, result) => {
+        if (err) { return res.cc(err) }
+        res.cc('updated', 0)
     })
 }

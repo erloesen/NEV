@@ -38,3 +38,29 @@ export const login = data => {
         }
     })
 }
+
+// forgetPassword verify then reset
+export const verify = data => {
+    const {
+        account,
+        email
+    } = data
+    return  instance({
+        url: '/user/verifyAccountAndEmail',
+        method: 'POST',
+        data: {
+            account,
+            email
+        }
+    })
+}
+export const resetPassword = (id, newpassword) => {
+    return  instance({
+        url: '/user/resetPassword',
+        method: 'POST',
+        data: {
+            id,
+            newpassword
+        }
+    })
+}

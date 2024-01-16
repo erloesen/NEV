@@ -8,6 +8,8 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 // for chinese
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
+// svg icon
+import 'virtual:svg-icons-register';
 
 const app = createApp(App);
 

@@ -17,7 +17,7 @@
                     <el-input v-model="loginData.account" placeholder="请输入账号"/>
                   </el-form-item>
                   <el-form-item label="密码">
-                    <el-input v-model="loginData.password" placeholder="请输入密码"/>
+                    <el-input v-model="loginData.password" placeholder="请输入密码" show-password/>
                   </el-form-item>
                   <div class="footer-wrapped">
                     <div class="forget-password">
@@ -133,8 +133,8 @@ const Register = async () => {
 const Login = async () => {
   const res = await login(loginData)
   const {token} = res.data
-  const {name} = res.data.results.account
-  console.log(res)
+  const name = res.data.results.account
+
   if (res.data.message == 'login successfully') {
     ElMessage({
       message: '登录成功',

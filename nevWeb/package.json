@@ -13,10 +13,12 @@
     "axios": "^1.6.3",
     "echarts": "^5.4.3",
     "element-plus": "^2.4.4",
+    "fast-glob": "^3.3.2",
     "mitt": "^3.0.1",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.3",
     "style-loader": "^3.3.3",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.3.13",
     "vue-router": "^4.2.5"
   },

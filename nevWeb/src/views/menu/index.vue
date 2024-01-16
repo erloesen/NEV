@@ -24,22 +24,22 @@
             <el-icon><Grid /></el-icon>
             <span>市级</span>
           </el-menu-item>
-          <el-menu-item index="5">
-            <el-icon><Aim /></el-icon>
-            <span>工厂级</span>
-          </el-menu-item>
-          <el-sub-menu index="6">
+          <el-sub-menu index="5">
             <template #title>
-              <el-icon><Tools /></el-icon>
-              <span>设置</span>
+              <el-icon><Aim /></el-icon>
+              <span>工厂级</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="6-1">账号设置</el-menu-item>
+              <el-menu-item index="5-1">数据融合</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-              <el-menu-item index="6-2">系统设置</el-menu-item>
+              <el-menu-item index="5-2">卫星遥感</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
+          <el-menu-item index="set">
+            <el-icon><Tools /></el-icon>
+            <span>系统设置</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container>
@@ -106,78 +106,83 @@ const returnLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-  .el-aside {
-    height: 100vh;
-    background: #0b308e;
-    text-align: center;
-    width: 210px;
+.el-aside {
+  height: 100vh;
+  background: #0b308e;
+  text-align: center;
+  width: 210px;
 
-    .title {
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      color: #fff;
-      background: #0b308e;
-    }
-
-    .el-menu {
-      background: #0b308e;
-      width: 210px;
-      height: 100vh;
-      border-right: 0px;
-      color: #fff
-    }
-
-    .el-menu-item {
-      color: #fff
-    }
-  }
-
-  .el-header {
+  .title {
+    padding: 20px;
     display: flex;
-    height: 55px;
-    background: #0b308e;
+    justify-content: center;
     color: #fff;
+    background: #0b308e;
+  }
+
+  .el-menu {
+    background: #0b308e;
+    width: 210px;
+    height: 100vh;
+    border-right: 0px;
+    color: #fff
+  }
+
+  .el-menu-item {
+    color: #fff
+  }
+}
+
+.el-header {
+  display: flex;
+  height: 55px;
+  background: #0b308e;
+  color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  .header-left-content {
+    font-size: 14px;
+  }
+  .header-right-content {
+    width: 160px;
+    display: flex;
+    justify-content: space-around;
     align-items: center;
-    justify-content: space-between;
-    .header-left-content {
-      font-size: 14px;
-    }
-    .header-right-content {
-      width: 160px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      .el-dropdown {
-        color: #fff
-      }
+    .el-dropdown {
+      color: #fff
     }
   }
+}
 
-  .el-menu-item:hover {
-    background: #409eff;
-  }
+.el-main {
+  --el-main-padding: 0px;
+  background-color: #f3f4fa;
+}
 
-  .dropdownPop {
-    background-color: #0b308e;
-  }
+.el-menu-item:hover {
+  background: #409eff;
+}
 
-  :deep(.el-sub-menu__title:hover) {
-    background: #409eff;
-  }
-  :deep(.el-sub-menu__title) {
-    color: #fff
-  }
-  :deep(.el-menu--inline) {
-    background: #0b308e;
-  }
-  :deep(.el-dropdown-menu__item) {
-    color: #fff
-  }
-  :deep(.el-dropdown-menu__item:hover) {
-    color: #fff;
-    background: #409eff;
-  }
+.dropdownPop {
+  background-color: #0b308e;
+}
+
+:deep(.el-sub-menu__title:hover) {
+  background: #409eff;
+}
+:deep(.el-sub-menu__title) {
+  color: #fff
+}
+:deep(.el-menu--inline) {
+  background: #0b308e;
+}
+:deep(.el-dropdown-menu__item) {
+  color: #fff
+}
+:deep(.el-dropdown-menu__item:hover) {
+  color: #fff;
+  background: #409eff;
+}
 
 
 </style>
