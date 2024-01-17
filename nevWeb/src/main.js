@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import router from './router'
+// pinia
+import pinia from "@/store/index.js";
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import ElementPlus from 'element-plus'
@@ -19,4 +21,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(router);
 app.use(ElementPlus, {locale: zhCn});
+app.use(pinia)
 app.mount('#app');

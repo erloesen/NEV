@@ -14,7 +14,7 @@
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
               >
-                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                <img v-if="store.imageurl" :src="store.imageurl" class="avatar" />
                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
               </el-upload>
             </div>
@@ -22,49 +22,67 @@
           <div class="account-info-wrapped">
             <span>账号：</span>
             <div class="account-info-content">
-              <el-input v-model="account" disabled></el-input>
+              <el-input v-model="store.account" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>密码：</span>
             <div class="account-info-content">
-              <el-input v-model="account" disabled></el-input>
+              <el-button type="primary">修改密码</el-button>
+            </div>
+          </div>
+          <div class="account-info-wrapped">
+            <span>手机：</span>
+            <div class="account-info-content">
+              <el-input v-model="store.phone" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>邮箱：</span>
             <div class="account-info-content">
-              <el-input v-model="account" disabled></el-input>
+              <el-input v-model="store.email"></el-input>
+            </div>
+            <div class="account-save-button">
+              <el-button type="primary">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>姓名：</span>
             <div class="account-info-content">
-              <el-input v-model="account" disabled></el-input>
+              <el-input v-model="store.name"></el-input>
+            </div>
+            <div class="account-save-button">
+              <el-button type="primary">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>性别：</span>
             <div class="account-info-content">
-              <el-input v-model="account" disabled></el-input>
+              <el-select v-model="store.sex">
+                <el-option label="男" value="男" />
+                <el-option label="女" value="女" />
+              </el-select>
+            </div>
+            <div class="account-save-button">
+              <el-button type="primary">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>身份：</span>
             <div class="account-info-content">
-              <el-input v-model="role" disabled></el-input>
+              <el-input v-model="store.role" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>公司：</span>
             <div class="account-info-content">
-              <el-input v-model="company" disabled></el-input>
+              <el-input v-model="store.company" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>职业：</span>
             <div class="account-info-content">
-              <el-input v-model="job" disabled></el-input>
+              <el-input v-model="store.job" disabled></el-input>
             </div>
           </div>
         </el-tab-pane>
@@ -82,7 +100,10 @@ import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
-import type { TabsPaneContext } from 'element-plus'
+import { useUserInfoStore } from '@/store/userinfo'
+import { bindAccount } from '@/api/userinfo'
+
+const store = useUserInfoStore()
 
 const breadcrumb = ref()
 const item = ref({
@@ -91,13 +112,25 @@ const item = ref({
 
 const activeName = ref('first')
 
-const imageUrl = ref('')
-
+// avatar image upload successfully
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response,
-    uploadFile
 ) => {
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+  // imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+  if (response.status == 0) {
+    userStore.$patch({
+      imageurl: response.url
+    })
+    ElMessage({
+      message: 'image uploaded',
+      type: 'success'
+    }),
+    (async () => {
+      await bindAccount(store.account, response.url, response.onlyid)
+    })()
+  } else {
+      ElMessage.error('upload image failed!')
+  }
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -110,15 +143,6 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   }
   return true
 }
-
-// other account info var
-const AccountDetailData = reactive({
-  account:'',
-  role:'',
-  company:'',
-  job:''
-});
-
 
 </script>
 
@@ -139,12 +163,16 @@ const AccountDetailData = reactive({
       align-items: center;
       padding-left: 50px;
       margin-bottom: 24px;
+      font-size: 14px;
 
       .account-info-content {
         margin-left: 24px;
         margin-right: 16px;
       }
-    ;
+
+      .account-save-button {
+        margin-left: 16px;
+      }
     }
   }
 }
@@ -161,6 +189,10 @@ const AccountDetailData = reactive({
   width: 178px;
   height: 178px;
   display: block;
+}
+
+:deep(.el-input) {
+  width: 240px;
 }
 </style>
 

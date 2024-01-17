@@ -44,10 +44,10 @@
       </el-aside>
       <el-container>
         <el-header>
-          <span class="header-left-content">今天是 {{currentDate}}，尊敬的 {{username}} 欢迎登录系统</span>
+          <span class="header-left-content">今天是 {{currentDate}}，尊敬的 {{store.account}} 欢迎登录系统</span>
           <div class="header-right-content">
             <el-icon :size="20"><Message /></el-icon>
-            <el-avatar :size="24" :src="circleUrl" />
+            <el-avatar :size="24" :src="store.imageurl" />
             <el-dropdown>
               <span class="el-dropdown-link">
                 操作
@@ -77,10 +77,12 @@ import {
 } from '@element-plus/icons-vue'
 import {ref, onMounted, reactive, toRefs} from 'vue'
 import { useRouter } from "vue-router";
+import { useUserInfoStore } from '@/store/userinfo'
 
 const currentDate = ref<string>('');
 
 const router = useRouter();
+const store = useUserInfoStore()
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -91,13 +93,6 @@ const getCurrentDate = () => {
 onMounted(() => {
   getCurrentDate();
 });
-
-const state = reactive({
-  circleUrl:
-      'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-})
-const { circleUrl } = toRefs(state)
-const username = localStorage.username
 
 const returnLogin = () => {
   router.push('/login')

@@ -86,9 +86,12 @@ import forget from './components/forgetpassword.vue'
 import { ElMessage } from "element-plus";
 import { login, register} from '@/api/login'
 import { useRouter } from "vue-router";
+import { useUserInfoStore } from '@/store/userinfo'
 
 const activeName = ref('first')
 const router = useRouter()
+const store = useUserInfoStore()
+
 interface formData {
   account: string;
   password: string;
@@ -132,22 +135,21 @@ const Register = async () => {
 // login
 const Login = async () => {
   const res = await login(loginData)
-  const {token} = res.data
-  const name = res.data.results.account
 
   if (res.data.message == 'login successfully') {
+    const {token} = res.data
+    const { id } = res.data.results
     ElMessage({
       message: '登录成功',
       type: 'success'
     })
     localStorage.setItem('token', token)
-    localStorage.setItem('username', name)
+    store.userinfo(id)
     router.push('/home')
   } else {
     ElMessage.error('登陆失败')
   }
 }
-
 
 // open forget password dialog
 const forgetP = ref()

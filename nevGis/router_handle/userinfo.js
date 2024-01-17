@@ -7,21 +7,20 @@ fs = require('fs');
 
 
 exports.uploadAvatar = (req, res) => {
-    const onlyId = crypto.randomUUID();
+    const onlyid = crypto.randomUUID();
     let oldName = req.files[0].filename;
     let newName = Buffer.from(req.files[0].originalname, 'latin1').toString('utf-8');
     fs.renameSync('./public/upload/' + oldName, './public/upload/' + newName);
 
     const sql = 'insert into sys_avt_images (imageurl, onlyid) values ($1, $2)'
-    const values = [`http://localhost:3000/upload/${newName}`, onlyId]
+    const values = [`http://localhost:3000/upload/${newName}`, onlyid]
     db.query(sql, values, (err, result) => {
         if (err) { return res.cc(err) }
         res.send({
-            onlyId,
+            onlyid,
             status:0,
             url:'http://localhost:3000/upload/' + newName
         })
-
     })
 }
 
@@ -48,7 +47,8 @@ exports.getUserinfo = (req, res) => {
     const sql = 'select * from sys_users where id = $1';
     db.query(sql, [req.body.id], (err, result) => {
         if (err) { return res.cc(err) }
-        res.send(result)
+        result.rows[0].password = ''
+        res.send(result.rows[0])
     })
 }
 
