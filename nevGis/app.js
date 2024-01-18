@@ -48,6 +48,8 @@ const loginRouter = require('./router/login');
 app.use('/api', loginRouter)
 const userRouter = require('./router/userinfo');
 app.use('/user', userRouter)
+const setRouter = require('./router/setting');
+app.use('/set', setRouter)
 
 
 // send err if joi

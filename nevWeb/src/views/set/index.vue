@@ -28,7 +28,7 @@
           <div class="account-info-wrapped">
             <span>密码：</span>
             <div class="account-info-content">
-              <el-button type="primary">修改密码</el-button>
+              <el-button type="primary" @click="openChangePassword">修改密码</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
@@ -43,7 +43,7 @@
               <el-input v-model="store.email"></el-input>
             </div>
             <div class="account-save-button">
-              <el-button type="primary">保存</el-button>
+              <el-button type="primary" @click="saveEmail">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
@@ -52,7 +52,7 @@
               <el-input v-model="store.name"></el-input>
             </div>
             <div class="account-save-button">
-              <el-button type="primary">保存</el-button>
+              <el-button type="primary" @click="saveName">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
@@ -64,7 +64,7 @@
               </el-select>
             </div>
             <div class="account-save-button">
-              <el-button type="primary">保存</el-button>
+              <el-button type="primary" @click="saveSex">保存</el-button>
             </div>
           </div>
           <div class="account-info-wrapped">
@@ -86,12 +86,13 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="公司信息" name="second">公司信息</el-tab-pane>
+        <el-tab-pane label="项目信息" name="second">公司信息</el-tab-pane>
         <el-tab-pane label="首页管理" name="third">首页管理</el-tab-pane>
         <el-tab-pane label="其他设置" name="fourth">其他设置</el-tab-pane>
       </el-tabs>
     </div>
   </div>
+  <change ref="changeP"></change>
 </template>
 
 <script lang="ts" setup>
@@ -102,9 +103,11 @@ import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
 import { useUserInfoStore } from '@/store/userinfo'
 import { bindAccount } from '@/api/userinfo'
+import change from './components/changepassword.vue'
+import {changeName, changeEmail, changeSex} from '@/api/userinfo'
 
 const store = useUserInfoStore()
-
+const changeP = ref()
 const breadcrumb = ref()
 const item = ref({
   first: '账号设置'
@@ -144,14 +147,54 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   return true
 }
 
+const openChangePassword = () => {
+  changeP.value.open()
+}
+
+const saveName = async () => {
+  const res = await changeName(sessionStorage.getItem('id'), store.name)
+  if (res.data.status == 0) {
+    ElMessage({
+      message: 'name updated',
+      type: 'success'
+    })
+  } else {
+    ElMessage.error('name update failed!')
+  }
+}
+
+const saveEmail = async () => {
+  const res = await changeEmail(sessionStorage.getItem('id'), store.email)
+  if (res.data.status == 0) {
+    ElMessage({
+      message: 'email updated',
+      type: 'success'
+    })
+  } else {
+    ElMessage.error('email update failed!')
+  }
+}
+
+const saveSex = async () => {
+  const res = await changeSex(sessionStorage.getItem('id'), store.sex)
+  if (res.data.status == 0) {
+    ElMessage({
+      message: 'sex updated',
+      type: 'success'
+    })
+  } else {
+    ElMessage.error('sex update failed!')
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
 .common-wrapped {
   padding: 8px;
   background: #f5f5f5;
-  // minus header and bread
-  height: calc(100vh - 85px);
+  // minus header and bread and padding*2
+  height: calc(100vh - 101px);
 
   .common-content {
     padding: 0 10px;

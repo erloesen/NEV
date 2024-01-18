@@ -143,6 +143,7 @@ const Login = async () => {
       message: '登录成功',
       type: 'success'
     })
+    sessionStorage.setItem('id', id)
     localStorage.setItem('token', token)
     store.userinfo(id)
     router.push('/home')
