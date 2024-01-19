@@ -44,7 +44,7 @@ const state = reactive({
 const changeUserPassword = async () => {
   if (passwordData.oldpassword && passwordData.newpassword) {
     const res = await changePassword(sessionStorage.getItem('id'), passwordData.oldpassword, passwordData.newpassword);
-    if (res.data.status == 0) {
+    if (res.status == 0) {
       ElMessage({
         message: 'updated',
         type: 'success'

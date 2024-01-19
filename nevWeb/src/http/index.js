@@ -20,7 +20,7 @@ instance.interceptors.request.use(function (config) {
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
     // do sth to res
-    return response;
+    return response.data;
 }, function (error) {
     return Promise.reject(error);
 });

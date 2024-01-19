@@ -118,7 +118,7 @@ const registerData:formData = reactive({
 const Register = async () => {
   if (registerData.password == registerData.repassword) {
     const res = await register(registerData)
-    if (res.data.message == 'register successfully') {
+    if (res.message == 'register successfully') {
       ElMessage({
         message: '注册成功',
         type: 'success'
@@ -136,9 +136,9 @@ const Register = async () => {
 const Login = async () => {
   const res = await login(loginData)
 
-  if (res.data.message == 'login successfully') {
-    const {token} = res.data
-    const { id } = res.data.results
+  if (res.message == 'login successfully') {
+    const {token} = res
+    const { id } = res.results
     ElMessage({
       message: '登录成功',
       type: 'success'

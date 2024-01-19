@@ -18,15 +18,15 @@ export const useUserInfoStore = defineStore('userinfo', {
     actions : {
         async userinfo (id) {
             const res = await getUserInfo(id);
-            this.account = res.data.account
-            this.imageurl = res.data.imageurl
-            this.name = res.data.name
-            this.sex = res.data.sex
-            this.phone = res.data.phone
-            this.email = res.data.email
-            this.role = res.data.role
-            this.company = res.data.company
-            this.job = res.data.job
+            this.account = res.account
+            this.imageurl = res.imageurl
+            this.name = res.name
+            this.sex = res.sex
+            this.phone = res.phone
+            this.email = res.email
+            this.role = res.role
+            this.company = res.company
+            this.job = res.job
         }
     }
 }, {

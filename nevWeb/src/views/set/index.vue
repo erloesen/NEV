@@ -86,13 +86,48 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="项目信息" name="second">公司信息</el-tab-pane>
+        <el-tab-pane label="项目信息" name="second">
+          <div class="account-info-wrapped">
+            <span>公司名称：</span>
+            <div class="account-info-content">
+              <el-input v-model="companyName"></el-input>
+            </div>
+            <div class="account-save-button">
+              <el-button type="primary" @click="changeCompanyName">保存</el-button>
+            </div>
+          </div>
+          <div class="account-info-wrapped">
+            <span>公司介绍：</span>
+            <div class="account-info-content">
+              <el-button type="success" @click="openEditor(1)">编辑内容</el-button>
+            </div>
+          </div>
+          <div class="account-info-wrapped">
+            <span>项目介绍：</span>
+            <div class="account-info-content">
+              <el-button type="success" @click="openEditor(2)">编辑内容</el-button>
+            </div>
+          </div>
+          <div class="account-info-wrapped">
+            <span>数据源：</span>
+            <div class="account-info-content">
+              <el-button type="success" @click="openEditor(3)">编辑内容</el-button>
+            </div>
+          </div>
+          <div class="account-info-wrapped">
+            <span>全国报告：</span>
+            <div class="account-info-content">
+              <el-button type="success" @click="openEditor(4)">编辑内容</el-button>
+            </div>
+          </div>
+        </el-tab-pane>
         <el-tab-pane label="首页管理" name="third">首页管理</el-tab-pane>
         <el-tab-pane label="其他设置" name="fourth">其他设置</el-tab-pane>
       </el-tabs>
     </div>
   </div>
   <change ref="changeP"></change>
+  <editor ref="editorP"></editor>
 </template>
 
 <script lang="ts" setup>
@@ -105,9 +140,13 @@ import { useUserInfoStore } from '@/store/userinfo'
 import { bindAccount } from '@/api/userinfo'
 import change from './components/changepassword.vue'
 import {changeName, changeEmail, changeSex} from '@/api/userinfo'
+import editor from './components/editor.vue'
+import {getCompanyInfo, changeCompanyInfo} from '@/api/setting'
+import {bus} from "@/utils/mitt"
 
 const store = useUserInfoStore()
 const changeP = ref()
+const editorP = ref()
 const breadcrumb = ref()
 const item = ref({
   first: '账号设置'
@@ -153,7 +192,7 @@ const openChangePassword = () => {
 
 const saveName = async () => {
   const res = await changeName(sessionStorage.getItem('id'), store.name)
-  if (res.data.status == 0) {
+  if (res.status == 0) {
     ElMessage({
       message: 'name updated',
       type: 'success'
@@ -165,7 +204,7 @@ const saveName = async () => {
 
 const saveEmail = async () => {
   const res = await changeEmail(sessionStorage.getItem('id'), store.email)
-  if (res.data.status == 0) {
+  if (res.status == 0) {
     ElMessage({
       message: 'email updated',
       type: 'success'
@@ -177,7 +216,7 @@ const saveEmail = async () => {
 
 const saveSex = async () => {
   const res = await changeSex(sessionStorage.getItem('id'), store.sex)
-  if (res.data.status == 0) {
+  if (res.status == 0) {
     ElMessage({
       message: 'sex updated',
       type: 'success'
@@ -185,6 +224,29 @@ const saveSex = async () => {
   } else {
     ElMessage.error('sex update failed!')
   }
+}
+
+const companyName = ref()
+const getCompanyName = async () => {
+  companyName.value = await getCompanyInfo()
+}
+getCompanyName()
+
+const changeCompanyName = async () => {
+  const res = await changeCompanyInfo(companyName.value)
+  if (res.status == 0) {
+    ElMessage({
+      message: 'company name updated',
+      type: 'success'
+    })
+  } else {
+    ElMessage.error('company name update failed!')
+  }
+}
+
+const openEditor = async (id: number) => {
+  bus.emit('editorTitle', id)
+  editorP.value.open()
 }
 
 </script>
@@ -207,6 +269,11 @@ const saveSex = async () => {
       padding-left: 50px;
       margin-bottom: 24px;
       font-size: 14px;
+
+      span {
+        width: 100px;
+        text-align: center;
+      }
 
       .account-info-content {
         margin-left: 24px;

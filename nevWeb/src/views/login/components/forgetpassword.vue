@@ -65,12 +65,12 @@ const state = reactive({
 })
 const verifyAccount = async () => {
   const res = await verify(forgetData)
-  if (res.data.status == 0) {
+  if (res.status == 0) {
     ElMessage({
       message: 'verified',
       type: 'success'
     })
-    localStorage.setItem('id', res.data.id)
+    localStorage.setItem('id', res.id)
     state.forgetPasswordDialog = false;
     state.changePasswordDialog = true;
   } else {
