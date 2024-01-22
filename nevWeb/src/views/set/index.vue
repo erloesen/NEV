@@ -87,6 +87,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="项目信息" name="second">
+          <div v-if="userRole === 'admin'" class="project-info-wrapped">
           <div class="account-info-wrapped">
             <span>公司名称：</span>
             <div class="account-info-content">
@@ -120,8 +121,35 @@
               <el-button type="success" @click="openEditor(4)">编辑内容</el-button>
             </div>
           </div>
+          </div>
+          <div v-else>您没有权限！</div>
         </el-tab-pane>
-        <el-tab-pane label="首页管理" name="third">首页管理</el-tab-pane>
+        <el-tab-pane label="首页管理" name="third">
+          <div v-if="userRole === 'admin'" class="home-wrapped">
+            <div class="tips">
+              <span>提示：点击图片框切换首页轮播图</span>
+            </div>
+<!--            swiper-->
+            <div class="swiper-wrapped" v-for="(item, index) in swiperData" :key="index">
+              <div class="swiper-name">轮播图&nbsp;{{index+1}}&nbsp;&nbsp;：</div>
+              <el-upload
+                  class="avatar-uploader"
+                  action="http://127.0.0.1:3000/set/uploadSwiper"
+                  :show-file-list="false"
+                  :on-success="handleSwiperSuccess"
+                  :before-upload="beforeAvatarUpload"
+                  :data="item"
+              >
+                <template #trigger>
+                  <img v-if="swiperUrls[index]" :src="swiperUrls[index]" class="swiper" />
+                  <img src="@/assets/noimage.jpg" alt="" v-else class="swiper" />
+<!--                  <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>-->
+                </template>
+              </el-upload>
+            </div>
+          </div>
+          <div v-else>您没有权限！</div>
+        </el-tab-pane>
         <el-tab-pane label="其他设置" name="fourth">其他设置</el-tab-pane>
       </el-tabs>
     </div>
@@ -141,7 +169,7 @@ import { bindAccount } from '@/api/userinfo'
 import change from './components/changepassword.vue'
 import {changeName, changeEmail, changeSex} from '@/api/userinfo'
 import editor from './components/editor.vue'
-import {getCompanyInfo, changeCompanyInfo} from '@/api/setting'
+import {getCompanyInfo, changeCompanyInfo, getSwipers} from '@/api/setting'
 import {bus} from "@/utils/mitt"
 
 const store = useUserInfoStore()
@@ -151,6 +179,7 @@ const breadcrumb = ref()
 const item = ref({
   first: '账号设置'
 })
+const userRole = store.role;
 
 const activeName = ref('first')
 
@@ -160,7 +189,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
 ) => {
   // imageUrl.value = URL.createObjectURL(uploadFile.raw!)
   if (response.status == 0) {
-    userStore.$patch({
+    store.$patch({
       imageurl: response.url
     })
     ElMessage({
@@ -249,6 +278,20 @@ const openEditor = async (id: number) => {
   editorP.value.open()
 }
 
+const handleSwiperSuccess: UploadProps['onSuccess'] = (
+    response,
+) => {
+  getAllSwipers()
+}
+
+const swiperData = [{name:'swiper1'}, {name:'swiper2'}, {name:'swiper3'},
+                    {name:'swiper4'}, {name:'swiper5'}, {name:'swiper6'}]
+const swiperUrls = ref([])
+const getAllSwipers = async () => {
+  swiperUrls.value = await getSwipers()
+}
+getAllSwipers()
+
 </script>
 
 <style scoped lang="scss">
@@ -282,6 +325,38 @@ const openEditor = async (id: number) => {
 
       .account-save-button {
         margin-left: 16px;
+      }
+    }
+
+    .home-wrapped {
+      padding-left: 50px;
+      display: flex;
+      flex-direction: column;
+
+      .tips {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        span {
+          font-size: 14px;
+          color: silver;
+        }
+      }
+
+      .swiper-wrapped {
+        display: flex;
+        margin-bottom: 16px;
+
+        .swiper-name {
+          font-size: 14px;
+          margin-bottom: 24px;
+        }
+
+        .swiper {
+          width: 340px;
+          height: 149px;
+        }
       }
     }
   }

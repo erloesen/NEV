@@ -92,7 +92,7 @@ toolbarConfig.excludeKeys = [
   'bgColor',
   'color',
   'group-more-style',
-  'fontFamily',
+  // 'fontFamily',
   'bulletedList',
   'numberedList',
   'lineHeight',
@@ -131,6 +131,7 @@ onBeforeUnmount(() => {
   const editor = editorRef.value
   if (editor == null) return
   editor.destroy()
+  bus.all.clear()
 })
 
 const handleCreated = (editor : any) => {
@@ -153,11 +154,6 @@ const open = () => {
 defineExpose({
   open,
 });
-
-// 取消订阅/监听
-onBeforeUnmount(() => {
-  bus.all.clear()
-})
 </script>
 
 <style scoped lang="scss">

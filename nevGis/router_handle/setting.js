@@ -1,11 +1,11 @@
 const db = require('../db/index.js');
 
 exports.uploadSwiper = (req, res) => {
-    const key = req.body.set_name
+    const key = req.body.name
     let oldName = req.files[0].filename;
     let newName = Buffer.from(req.files[0].originalname, 'latin1').toString('utf-8');
     fs.renameSync('./public/upload/' + oldName, './public/upload/' + newName);
-    const sql = 'update into sys_setting set set_value = $1 where set_name = $2'
+    const sql = 'update sys_setting set set_value = $1 where set_name = $2'
     const values = [`http://localhost:3000/upload/${newName}`, key]
     db.query(sql, values, (err, result) => {
         if (err) { return res.cc(err) }
@@ -18,14 +18,14 @@ exports.uploadSwiper = (req, res) => {
 }
 
 exports.getSwipers = (req, res) => {
-    const sql = "select * from sys_setting where set_name like 'swiper%'"
+    const sql = "select * from sys_setting where set_name like 'swiper%' order by id"
     db.query(sql, (err, result) => {
         if (err) { return res.cc(err) }
-        res.send({
-            status:0,
-            message:'get swiper image successfully',
-            data: result.rows
+        let array = []
+        result.rows.forEach((e) => {
+            array.push(e.set_value)
         })
+        res.send(array)
     })
 
 }
@@ -56,7 +56,7 @@ exports.getInfo = (req, res) => {
 }
 
 exports.getAllInfo = (req, res) => {
-    const sql = "select * from sys_setting where set_name not like 'swiper%'"
+    const sql = "select * from sys_setting where set_name not like 'swiper%' order by id"
     db.query(sql, (err, result) => {
         if (err) { return res.cc(err) }
         res.send(result.rows)
