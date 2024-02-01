@@ -12,8 +12,7 @@
                   action="http://127.0.0.1:3000/user/uploadAvatar"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
-                  :before-upload="beforeAvatarUpload"
-              >
+                  :before-upload="beforeAvatarUpload">
                 <img v-if="store.imageurl" :src="store.imageurl" class="avatar" />
                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
               </el-upload>
@@ -22,7 +21,7 @@
           <div class="account-info-wrapped">
             <span>账号：</span>
             <div class="account-info-content">
-              <el-input v-model="store.account" disabled></el-input>
+              <el-input v-model="userData.account" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
@@ -34,13 +33,13 @@
           <div class="account-info-wrapped">
             <span>手机：</span>
             <div class="account-info-content">
-              <el-input v-model="store.phone" disabled></el-input>
+              <el-input v-model="userData.phone" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>邮箱：</span>
             <div class="account-info-content">
-              <el-input v-model="store.email"></el-input>
+              <el-input v-model="userData.email"></el-input>
             </div>
             <div class="account-save-button">
               <el-button type="primary" @click="saveEmail">保存</el-button>
@@ -49,7 +48,7 @@
           <div class="account-info-wrapped">
             <span>姓名：</span>
             <div class="account-info-content">
-              <el-input v-model="store.name"></el-input>
+              <el-input v-model="userData.name"></el-input>
             </div>
             <div class="account-save-button">
               <el-button type="primary" @click="saveName">保存</el-button>
@@ -58,7 +57,7 @@
           <div class="account-info-wrapped">
             <span>性别：</span>
             <div class="account-info-content">
-              <el-select v-model="store.sex">
+              <el-select v-model="userData.sex">
                 <el-option label="男" value="男" />
                 <el-option label="女" value="女" />
               </el-select>
@@ -70,24 +69,24 @@
           <div class="account-info-wrapped">
             <span>身份：</span>
             <div class="account-info-content">
-              <el-input v-model="store.role" disabled></el-input>
+              <el-input v-model="userData.role" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>公司：</span>
             <div class="account-info-content">
-              <el-input v-model="store.company" disabled></el-input>
+              <el-input v-model="userData.company" disabled></el-input>
             </div>
           </div>
           <div class="account-info-wrapped">
             <span>职业：</span>
             <div class="account-info-content">
-              <el-input v-model="store.job" disabled></el-input>
+              <el-input v-model="userData.job" disabled></el-input>
             </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="项目信息" name="second">
-          <div v-if="userRole === 'admin'" class="project-info-wrapped">
+          <div v-if="userData.role === 'admin'" class="project-info-wrapped">
           <div class="account-info-wrapped">
             <span>公司名称：</span>
             <div class="account-info-content">
@@ -125,7 +124,7 @@
           <div v-else>您没有权限！</div>
         </el-tab-pane>
         <el-tab-pane label="首页管理" name="third">
-          <div v-if="userRole === 'admin'" class="home-wrapped">
+          <div v-if="userData.role === 'admin'" class="home-wrapped">
             <div class="tips">
               <span>提示：点击图片框切换首页轮播图</span>
             </div>
@@ -160,17 +159,30 @@
 
 <script lang="ts" setup>
 import breadCrumb from '@/components/bread_crumb.vue'
-import { ref, reactive } from 'vue'
+import {ref, reactive, onMounted} from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
 import { useUserInfoStore } from '@/store/userinfo'
 import { bindAccount } from '@/api/userinfo'
 import change from './components/changepassword.vue'
-import {changeName, changeEmail, changeSex} from '@/api/userinfo'
+import {changeName, changeEmail, changeSex, getUserInfo} from '@/api/userinfo'
 import editor from './components/editor.vue'
 import {getCompanyInfo, changeCompanyInfo, getSwipers} from '@/api/setting'
 import {bus} from "@/utils/mitt"
+
+onMounted(async () => {
+  let id = sessionStorage.getItem('id')
+  const res = await getUserInfo(id)
+  userData.account = res.account
+  userData.name = res.name
+  userData.sex = res.sex
+  userData.email = res.email
+  userData.role = res.role
+  userData.company = res.company
+  userData.job = res.job
+  userData.phone = res.phone
+})
 
 const store = useUserInfoStore()
 const changeP = ref()
@@ -179,9 +191,30 @@ const breadcrumb = ref()
 const item = ref({
   first: '账号设置'
 })
-const userRole = store.role;
 
 const activeName = ref('first')
+
+interface userData {
+  account: string;
+  name ?: string;
+  sex ?: string;
+  email ?: string;
+  role: string;
+  company ?: string;
+  job ?: string;
+  phone ?: string;
+}
+
+const userData = reactive({
+  account: '',
+  name: '',
+  sex: '',
+  email: '',
+  role: '',
+  company: '',
+  job: '',
+  phone: ''
+})
 
 // avatar image upload successfully
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
@@ -197,7 +230,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
       type: 'success'
     }),
     (async () => {
-      await bindAccount(store.account, response.url, response.onlyid)
+      await bindAccount(userData.account, response.url, response.onlyid)
     })()
   } else {
       ElMessage.error('upload image failed!')
@@ -220,36 +253,39 @@ const openChangePassword = () => {
 }
 
 const saveName = async () => {
-  const res = await changeName(sessionStorage.getItem('id'), store.name)
+  const res = await changeName(sessionStorage.getItem('id'), userData.name)
   if (res.status == 0) {
     ElMessage({
       message: 'name updated',
       type: 'success'
     })
+    store.name = userData.name
   } else {
     ElMessage.error('name update failed!')
   }
 }
 
 const saveEmail = async () => {
-  const res = await changeEmail(sessionStorage.getItem('id'), store.email)
+  const res = await changeEmail(sessionStorage.getItem('id'), userData.email)
   if (res.status == 0) {
     ElMessage({
       message: 'email updated',
       type: 'success'
     })
+    store.email = userData.email
   } else {
     ElMessage.error('email update failed!')
   }
 }
 
 const saveSex = async () => {
-  const res = await changeSex(sessionStorage.getItem('id'), store.sex)
+  const res = await changeSex(sessionStorage.getItem('id'), userData.sex)
   if (res.status == 0) {
     ElMessage({
       message: 'sex updated',
       type: 'success'
     })
+    store.sex = userData.sex
   } else {
     ElMessage.error('sex update failed!')
   }

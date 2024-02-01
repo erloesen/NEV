@@ -16,6 +16,7 @@
     "echarts": "^5.4.3",
     "element-plus": "^2.4.4",
     "fast-glob": "^3.3.2",
+    "leaflet": "^1.9.4",
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",
     "pinia-persistedstate-plugin": "^0.1.0",

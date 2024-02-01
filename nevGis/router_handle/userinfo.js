@@ -13,13 +13,13 @@ exports.uploadAvatar = (req, res) => {
     fs.renameSync('./public/upload/' + oldName, './public/upload/' + newName);
 
     const sql = 'insert into sys_avt_images (imageurl, onlyid) values ($1, $2)'
-    const values = [`http://localhost:3000/upload/${newName}`, onlyid]
+    const values = [`http://172.16.206.127:3000/upload/${newName}`, onlyid]
     db.query(sql, values, (err, result) => {
         if (err) { return res.cc(err) }
         res.send({
             onlyid,
             status:0,
-            url:'http://localhost:3000/upload/' + newName
+            url:'http://172.16.206.127:3000/upload/' + newName
         })
     })
 }

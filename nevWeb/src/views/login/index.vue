@@ -35,25 +35,25 @@
               <el-tab-pane label="注册" name="second">
                 <el-form class="login-form">
                   <el-form-item label="账号">
-                    <el-input v-model="registerData.account" placeholder="英文数字组合，6到20位"/>
+                    <el-input v-model="registerData.account" placeholder="英文数字组合，6到20位，必填"/>
                   </el-form-item>
                   <el-form-item label="密码">
-                    <el-input v-model="registerData.password" placeholder="至少8位，大写字母、小写字母和数字"/>
+                    <el-input v-model="registerData.password" placeholder="至少8位，大写、小写字母和数字，必填"/>
                   </el-form-item>
                   <el-form-item label="确认密码">
-                    <el-input v-model="registerData.repassword" placeholder="请再次输入密码"/>
+                    <el-input v-model="registerData.repassword" placeholder="请再次输入密码，必填"/>
                   </el-form-item>
                   <el-form-item label="手机">
-                    <el-input v-model="registerData.phone"/>
+                    <el-input v-model="registerData.phone" placeholder="必填"/>
                   </el-form-item>
                   <el-form-item label="邮箱">
-                    <el-input v-model="registerData.email"/>
+                    <el-input v-model="registerData.email" placeholder="必填"/>
                   </el-form-item>
                   <el-form-item label="职位">
-                    <el-input v-model="registerData.job"/>
+                    <el-input v-model="registerData.job" placeholder="必填"/>
                   </el-form-item>
                   <el-form-item label="公司">
-                    <el-input v-model="registerData.company"/>
+                    <el-input v-model="registerData.company" placeholder="必填"/>
                   </el-form-item>
                   <div class="footer-button">
                     <el-button type="primary" @click="Register">注册</el-button>

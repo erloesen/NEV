@@ -20,7 +20,8 @@ export default defineConfig({
   server: {
     port: 8000,
     open: true, // open browser auto
-    cors: true
+    cors: true,
+    host: "0.0.0.0"
   },
   resolve: {
     alias: {

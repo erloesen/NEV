@@ -37,11 +37,11 @@ app.use((req, res, next) => {
 // import jwt, exclude interface doesnt need to be coded (login and register)
 const jwtconfig = require('./jwt_config/index.js');
 const { expressjwt:jwt } = require('express-jwt')
-// app.use(jwt({
-//     secret: jwtconfig.jwtSecretKey, algorithms:['HS256']
-// }).unless({
-//     path: [/^\/api\//]
-// }))
+app.use(jwt({
+    secret: jwtconfig.jwtSecretKey, algorithms:['HS256']
+}).unless({
+    path: [/^\/api\//]
+}))
 
 // router
 const loginRouter = require('./router/login');
@@ -50,7 +50,10 @@ const userRouter = require('./router/userinfo');
 app.use('/user', userRouter)
 const setRouter = require('./router/setting');
 app.use('/set', setRouter)
-
+const countryRouter = require('./router/country');
+app.use('/country', countryRouter)
+const factoryRouter = require('./router/factory');
+app.use('/factory', factoryRouter)
 
 // send err if joi
 app.use((req, res, next) => {
@@ -58,6 +61,6 @@ app.use((req, res, next) => {
 })
 
 // bind host and port
-app.listen(3000, () => {
-    console.log('http://localhost:3000')
+app.listen(3000, '172.16.206.127', () => {
+    console.log('http://172.16.206.127:3000')
 })

@@ -12,11 +12,11 @@
             <el-icon><HomeFilled /></el-icon>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="country">
             <el-icon><Histogram /></el-icon>
             <span>全国</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="province">
             <el-icon><Menu /></el-icon>
             <span>省级</span>
           </el-menu-item>
@@ -33,7 +33,7 @@
               <el-menu-item index="5-1">数据融合</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-              <el-menu-item index="5-2">卫星遥感</el-menu-item>
+              <el-menu-item index="satellite">卫星遥感</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
           <el-menu-item index="set">
@@ -119,7 +119,7 @@ const returnLogin = () => {
     background: #0b308e;
     width: 210px;
     height: 100vh;
-    border-right: 0px;
+    border-right: 0;
     color: #fff
   }
 

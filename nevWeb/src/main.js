@@ -12,6 +12,8 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 // svg icon
 import 'virtual:svg-icons-register';
+import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
 
 const app = createApp(App);
 
@@ -22,4 +24,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(router);
 app.use(ElementPlus, {locale: zhCn});
 app.use(pinia)
+app.config.globalProperties.L = L
 app.mount('#app');
