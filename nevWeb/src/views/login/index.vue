@@ -146,7 +146,7 @@ const Login = async () => {
     sessionStorage.setItem('id', id)
     localStorage.setItem('token', token)
     store.userinfo(id)
-    router.push('/home')
+    await router.push('/home')
   } else {
     ElMessage.error('登陆失败')
   }

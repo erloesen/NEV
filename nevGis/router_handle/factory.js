@@ -103,7 +103,7 @@ exports.getFacDetail = (req, res) => {
 
     const getFacImgs = () => {
         return new Promise(resolve => {
-            const sql = "select pid, imgdate from sys_fac_images where pid = $1 order by imgdate"
+            const sql = "select id, imgdate from sys_fac_images where id = $1 order by imgdate desc"
             db.query(sql, [id], (err, result) => {
                 const data = result.rows;
                 const imgdate = []

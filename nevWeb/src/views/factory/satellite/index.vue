@@ -102,6 +102,17 @@
             </template>
             {{facinfo.station}}
           </el-descriptions-item>
+          <el-descriptions-item>
+            <template #label>
+              <div class="cell-item">
+                <el-icon :style="{ margin: '0 5px'}">
+                  <Picture />
+                </el-icon>
+                影像情况
+              </div>
+            </template>
+            {{facinfo.imgcount}}
+          </el-descriptions-item>
         </el-descriptions>
       </div>
     </div>
@@ -125,8 +136,8 @@
             @click="(showFacImg(facinfo.id, index))"
         >
           <el-card>
-            <h4>Update Github template</h4>
-            <p>Tom committed 2018/4/12 20:46</p>
+            <h4>关于影像的标题</h4>
+            <p>一些具体描述</p>
           </el-card>
         </el-timeline-item>
       </el-timeline>
@@ -178,6 +189,7 @@ const showFacImg = (id, index) => {
 
 const showFac = (id) => {
   mapComponent.value.showSelectedFac(id)
+  activeIndex.value = null
 }
 
 const province = ref()
@@ -195,7 +207,8 @@ const facinfo = reactive({
   dormitory:'',
   station:'',
   imgs:[],
-  imgdates:[]
+  imgdates:[],
+  imgcount:null
 })
 
 const handleProChange = (province) => {
@@ -240,6 +253,7 @@ const getFacInfo = async (id) => {
     imgdates.push(date)
   })
   facinfo.imgdates = imgdates
+  facinfo.imgcount = imgdates.length
   console.log(facinfo)
   await showFac(facinfo.id)
   selectFacPop(popdate, pop)

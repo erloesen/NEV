@@ -1,20 +1,18 @@
 import axios from 'axios'
 
-const authToken = localStorage.getItem('token')
-
 const instance = axios.create({
     //backend
     baseURL: 'http://172.16.206.127:3000',
     timeout: 6000,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `${authToken}`
     }
 })
 
 // block req and res before then or catch
 instance.interceptors.request.use(function (config) {
     // do sth before req
+    const authToken = localStorage.getItem('token')
     config.headers.Authorization = `${authToken}`;
     return config;
 }, function (error) {

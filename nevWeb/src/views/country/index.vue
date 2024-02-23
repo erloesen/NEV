@@ -395,6 +395,11 @@ const countrybar = async () => {
       },
       markLine: {
         data: [{ type: 'average', name: 'Avg' }]
+      },
+      itemStyle: {
+        normal: {
+          barBorderRadius: [20, 20, 0, 0]
+        }
       }
     })
   })
@@ -463,7 +468,7 @@ const countryline = async () => {
   })
   insur.setOption({
     title: {
-      text: '上限量',
+      text: '上险量',
       left: 'center',
       textStyle: {
         fontSize: 14
@@ -554,7 +559,7 @@ const countryline = async () => {
 .country-wrapped {
   padding: 8px;
   height: calc(100vh - 101px);
-  background: #f8f8f8;
+  background: #161D26;
 
   .top-content-wrapped {
     height: 40%;
@@ -571,7 +576,7 @@ const countryline = async () => {
 
   .country-index {
     width: calc(60% - 2px);
-    background: #fff;
+    background: #1F2935;
   }
 
   .bottom-content-wrapped {
@@ -590,15 +595,25 @@ const countryline = async () => {
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
+        border-radius: 6px;
       }
-
+      .pmgrowth-wrapped::before {
+        content: '';
+        position: absolute; /* 绝对定位 */
+        top: 5px; /* 控制位置 */
+        left: 0; /* 控制位置 */
+        width: 4px; /* 短线宽度 */
+        height: 25px; /* 短线高度 */
+        background: linear-gradient(171deg, #0081FF 0%, #22CCE2 101%); /* 短线颜色 */
+        border-radius: 0px 2px 2px 0px; /* 短线形状为圆形 */
+      }
       .owcratio-wrapped {
         width: 100%;
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
 
       .pmcindex-wrapped {
@@ -606,7 +621,7 @@ const countryline = async () => {
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
     }
 
@@ -622,7 +637,7 @@ const countryline = async () => {
         margin-bottom: 10px;
         height: calc(50% - 10px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
 
       .cnetinc-wrapped {
@@ -631,7 +646,7 @@ const countryline = async () => {
         margin-bottom: 10px;
         height: calc(50% - 10px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
     }
 
@@ -647,7 +662,7 @@ const countryline = async () => {
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
 
       .fintimes-wrapped {
@@ -655,7 +670,7 @@ const countryline = async () => {
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
 
       .insur-wrapped {
@@ -663,7 +678,7 @@ const countryline = async () => {
         margin-bottom: 4px;
         height: calc(33% - 4px);
         display: flex;
-        background: #fff;
+        background: #1F2935;
       }
     }
   }

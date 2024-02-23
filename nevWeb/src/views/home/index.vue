@@ -42,7 +42,7 @@
 
 <script setup>
 import breadCrumb from '@/components/bread_crumb.vue'
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {getSwipers, getAllInfo} from "@/api/setting.js"
 import { bus } from "@/utils/mitt.js"
 import introduce from "./components/introduce.vue"

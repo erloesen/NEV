@@ -10,7 +10,7 @@ exports.register = (req, res) => {
     const reginfo = req.body;
     // verify null
     if (!reginfo.account || !reginfo.password) {
-        return res.cc('account and password can not be null')
+        return res.cc('account or password can not be null')
     }
     // verify if account already exist
     const sqls = 'select * from sys_users where account=$1'

@@ -25,6 +25,7 @@ const props = defineProps(['item']);
   .bread-crumb-icon {
     margin-right: 5px;
     margin-top: 2px;
+    fill: #fff;
   }
 
   :deep(.el-breadcrumb__item) {
@@ -34,5 +35,9 @@ const props = defineProps(['item']);
   }
   :deep(.el-breadcrumb__inner) {
     font-weight: 500;
+    color: #fff;
+  }
+  :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
+    color: #fff;
   }
 </style>

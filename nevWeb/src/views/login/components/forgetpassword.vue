@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import {reactive, ref} from 'vue';
+import {onBeforeMount, reactive, ref} from 'vue';
 import {verify, resetPassword} from '@/api/login';
 import {ElMessage} from "element-plus";
 

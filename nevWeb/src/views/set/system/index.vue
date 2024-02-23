@@ -141,7 +141,7 @@
               >
                 <template #trigger>
                   <img v-if="swiperUrls[index]" :src="swiperUrls[index]" class="swiper" />
-                  <img src="@/assets/noimage.jpg" alt="" v-else class="swiper" />
+                  <img src="../../../assets/noimage.jpg" alt="" v-else class="swiper" />
 <!--                  <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>-->
                 </template>
               </el-upload>

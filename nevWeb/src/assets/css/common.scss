@@ -1,0 +1,51 @@
+// 用户表格
+.table-wrapped {
+  padding: 8px;
+  height: calc(100vh - 101px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .table-top {
+    .table-header {
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 48px;
+
+      .el-input__wrapper {
+        height: 32px;
+        padding: 0 15px;
+      }
+    }
+  }
+
+  .table-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    .el-pagination {
+      .btn-prev, .btn-next {
+        background-color: #161D26 !important;
+        color:#fff
+      }
+      button:disabled {
+        color:#409eff
+      }
+      .el-pager {
+        li:not(.active):not(.disabled) {
+          background-color: #161D26 !important;
+          color: #fff;
+        }
+        li:not(.disabled).is-active {
+          color: #409eff;
+        }
+      }
+    }
+  }
+
+  .edit-btn {
+    display: flex;
+  }
+}

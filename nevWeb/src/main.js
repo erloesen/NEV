@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
 import router from './router'
 // pinia
 import pinia from "@/store/index.js";
@@ -14,6 +13,8 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 import 'virtual:svg-icons-register';
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+// 全局样式
+import '@/assets/css/common.scss'
 
 const app = createApp(App);
 

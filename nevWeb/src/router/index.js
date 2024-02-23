@@ -22,9 +22,19 @@ const routes = [
                 component: () => import('@/views/home/index.vue')
             },
             {
-                name: 'set',
-                path: '/set',
-                component: () => import('@/views/set/index.vue')
+                name: 'system',
+                path: '/system',
+                component: () => import('@/views/set/system/index.vue')
+            },
+            {
+                name: 'admin',
+                path: '/admin',
+                component: () => import('@/views/set/admin/index.vue')
+            },
+            {
+                name: 'user',
+                path: '/user',
+                component: () => import('@/views/set/user/index.vue')
             },
             {
                 name: 'country',

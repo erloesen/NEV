@@ -24,22 +24,25 @@
             <el-icon><Grid /></el-icon>
             <span>市级</span>
           </el-menu-item>
+          <el-menu-item index="satellite">
+            <el-icon><Aim /></el-icon>
+            <span>工厂级</span>
+          </el-menu-item>
           <el-sub-menu index="5">
             <template #title>
-              <el-icon><Aim /></el-icon>
-              <span>工厂级</span>
+              <el-icon><Tools /></el-icon>
+              <span>管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="5-1">数据融合</el-menu-item>
+              <el-menu-item index="admin">管理员设置</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-              <el-menu-item index="satellite">卫星遥感</el-menu-item>
+              <el-menu-item index="user">用户设置</el-menu-item>
+            </el-menu-item-group>
+            <el-menu-item-group>
+              <el-menu-item index="system">系统设置</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
-          <el-menu-item index="set">
-            <el-icon><Tools /></el-icon>
-            <span>系统设置</span>
-          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container>
@@ -63,7 +66,6 @@
         </el-header>
         <el-main>
           <router-view>
-
           </router-view>
         </el-main>
       </el-container>
@@ -103,7 +105,6 @@ const returnLogin = () => {
 <style lang="scss" scoped>
 .el-aside {
   height: 100vh;
-  background: #0b308e;
   text-align: center;
   width: 210px;
 
@@ -111,12 +112,12 @@ const returnLogin = () => {
     padding: 20px;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     color: #fff;
-    background: #0b308e;
   }
 
   .el-menu {
-    background: #0b308e;
+    background: linear-gradient(180deg, #1F2935 0%, #425365 100%);
     width: 210px;
     height: 100vh;
     border-right: 0;
@@ -131,7 +132,7 @@ const returnLogin = () => {
 .el-header {
   display: flex;
   height: 55px;
-  background: #0b308e;
+  background: #1F2935;
   color: #fff;
   align-items: center;
   justify-content: space-between;
@@ -151,11 +152,11 @@ const returnLogin = () => {
 
 .el-main {
   --el-main-padding: 0px;
-  background-color: #f3f4fa;
+  background-color: #161D26;
 }
 
 .el-menu-item:hover {
-  background: #409eff;
+  background: #161D26;
 }
 
 .dropdownPop {
@@ -163,7 +164,7 @@ const returnLogin = () => {
 }
 
 :deep(.el-sub-menu__title:hover) {
-  background: #409eff;
+  background: #161D26;
 }
 :deep(.el-sub-menu__title) {
   color: #fff

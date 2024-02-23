@@ -2,9 +2,9 @@ const db = require('../db/index.js');
 const bcrypt = require('bcrypt');
 // generate uuid
 const crypto = require('crypto');
+const e = require("express");
 // file
 fs = require('fs');
-
 
 exports.uploadAvatar = (req, res) => {
     const onlyid = crypto.randomUUID();
@@ -124,5 +124,156 @@ exports.resetPassword = (req, res) => {
     db.query(sql, [req.body.newpassword, req.body.id], (err, result) => {
         if (err) { return res.cc(err) }
         res.cc('updated', 0)
+    })
+}
+
+// user control
+exports.createSuperUser = (req, res) => {
+    const {
+        account,
+        password,
+        phone,
+        email,
+        name,
+        sex,
+        role,
+        company,
+        job
+    } = req.body
+    console.log(req.body)
+    if (!account || !password) {
+        return res.cc('account or password can not be null')
+    }
+    const sqls = 'select * from sys_users where account=$1'
+    const user = [account];
+    db.query(sqls, user, (err, result) => {
+        if (result.rowCount !== 0) {
+            return res.cc('account already exists!')
+        } else {
+            // encryption
+            const pw = bcrypt.hashSync(password, 10)
+            // insert
+            const sqlin = "insert into sys_users (account, password, phone, email, job, company, role," +
+                " status, createdate, name, sex) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) ";
+            const status = 'normal';
+            const createdate = new Date();
+            const value = [account, pw, phone, email, job, company, role, status, createdate, name, sex];
+            db.query(sqlin, value, (err, result) => {
+                if (result.rowCount !== 1) { return res.cc('register super user filed!') }
+                return res.cc('super user register successfully', 0)
+            })
+        }
+    })
+}
+
+exports.getSuperUserList = (req, res) => {
+    let sql = "select * from sys_users"
+    const admin = req.body.admin
+    if (admin == 1) {
+        sql = sql + " where role != 'user' order by id"
+    } else {
+        sql = sql + " where role = 'user' order by id"
+    }
+    db.query(sql, (err, result) => {
+        if (err) { return res.cc(err) }
+        const data = result.rows
+        data.forEach(function(item){
+            item.password = ''
+        })
+        res.send(data)
+    })
+}
+
+exports.modifySuperUser = (req, res) => {
+    const {
+        id,
+        name,
+        sex,
+        phone,
+        email,
+        role,
+        company,
+        job
+    } = req.body
+    const update = new Date();
+    const sql = "update sys_users set name=$1, sex=$2, phone=$3, email=$4, role=$5, company=$6, job=$7, createdate=$8 where id = $9"
+    db.query(sql, [name, sex, phone, email, role, company, job, update, id], (err, result) => {
+      if  (result.rowCount !== 1) { return res.cc('modify super user filed!') }
+      return res.cc('super user modified', 0)
+    })
+}
+
+exports.SuperUser2User = (req, res) => {
+    const role = 'user'
+    const id = req.body.id
+    const sql = "update sys_users set role=$1 where id=$2"
+    db.query(sql, [role, id], (err, result) => {
+        if  (result.rowCount !== 1) { return res.cc('downgrade failed!') }
+        return res.cc('super user downgraded', 0)
+    })
+}
+
+exports.User2SuperUser = (req, res) => {
+    const role = req.body.role
+    const id = req.body.id
+    const sql = "update sys_users set role=$1 where id=$2"
+    db.query(sql, [role, id], (err, result) => {
+        if  (result.rowCount !== 1) { return res.cc('upgrade failed!') }
+        return res.cc(`user changed to ${role}`, 0)
+    })
+}
+
+exports.searchUser = (req, res) => {
+    let sql = "select * from sys_users where lower(account) like $1"
+    const account = req.body.account.toLowerCase()
+    const admin = req.body.admin
+    if (admin == 1) {
+        sql = sql + " and role != 'user'"
+    } else {
+        sql = sql + " and role = 'user'"
+    }
+    const searchTerm = `%${account}%`
+    db.query(sql, [searchTerm], (err, result) => {
+        if (err) { return res.cc(err) }
+        const data = result.rows
+        data.forEach(function(item){
+            item.password = ''
+        })
+        res.send(data)
+    })
+}
+
+exports.freezeUser = (req, res) => {
+    const sql = "update sys_users set status = 'frozen' where id = $1"
+    db.query(sql, [req.body.id], (err, result) => {
+        if (err) { return res.cc(err) }
+        return res.cc(`user froze!`, 0)
+    })
+}
+
+exports.thawUser = (req, res) => {
+    const sql = "update sys_users set status = 'normal' where id = $1"
+    db.query(sql, [req.body.id], (err, result) => {
+        if (err) { return res.cc(err) }
+        return res.cc(`user thawed!`, 0)
+    })
+}
+
+exports.getAbnormalUser = (req, res) => {
+    const sql = "select * from sys_users where status = 'frozen'"
+    db.query(sql, (err, result) => {
+        if (err) { return res.cc(err) }
+        res.send(result)
+    })
+}
+
+exports.deleteUser = (req, res) => {
+    const sql = "delete from sys_users where id = $1"
+    db.query(sql, [req.body.id], (err, result) => {
+        const sql2 = "delete from image where account = $1"
+        db.query(sql2, [req.body.account], (err, result) => {
+            if (err) { return res.cc(err) }
+            return res.cc(`user deleted!`, 0)
+        })
     })
 }
